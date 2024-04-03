@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "df2e96cc-7002-4dd0-9064-abd7bd5c6a67",
+		"name": "Use Of Lunch Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32595040"
+	},
+	"item": [
+		{
+			"name": "Post Lunch TimeStamp on sql",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"pm.test(\"Content-Type is present and is application/json\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains all necessary data\", function () {\r",
+							"    let responseData = pm.response.json();\r",
+							"    let firstObject = responseData[0];\r",
+							"\r",
+							"    pm.expect(firstObject).to.have.property('EmpCode');\r",
+							"    pm.expect(firstObject).to.have.property('EmpName');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8099/punch/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8099",
+					"path": [
+						"punch",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
