@@ -33,8 +33,8 @@ router.route('/punch/:empCode').post(async (req, res) => {
     let empCode = req.params.empCode;
     try {
         const employeeData = await LunchPunch.addLunchServiceUsageAndRetrieveEmployee(empCode);
+        console.log('Enployee eating...' + employeeData[0]?.EmpName)
         res.status(200).json(employeeData); // Send the employee data back to the client
-        // console.log('Enployee eating...')
     } catch (error) {
         res.status(500).send(error.message); // Send the error message back to the client
         // console.error(error.message)

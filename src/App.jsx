@@ -1,51 +1,114 @@
 import './assets/css/app.css';
-import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import axios from 'axios';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 function App() {
   const [empCode, SetEmpCode] = useState('');
   const [empCode2, SetEmpCode2] = useState('');
-
-  // Execute de mutation
-  const submitPunch = (event) => {
-    event.preventDefault();
-
-    // Mutation
-    if (empCode === empCode2) {
-      mutation.mutate({ empCode });
-    } else {
-      alert('Employee codes do not match. Please try again.');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [succes, setSucces] = useState(false);
+  const [responseArray, setResposeArray] = useState([
+    {
+      EmpCode: "",
+      EmpName: "",
+      ProfilePicture: null,
     }
-  };
+  ]);
 
-  // Mutating
-  const mutation = useMutation(empCode => {
-    return axios.post('http://localhost:8099/punch/', { empCode });
-  });
-  if (mutation.isLoading) {
-    return <span>Registrando...</span>;
+  // Execute de submit
+  const submitPunch = async (event) => {
+    event.preventDefault();
+    if (empCode !== empCode2) {
+      withReactContent(Swal).fire({
+        title: "Numero de empleado incorrecto?",
+        text: "Ambos registros deben ser iguales",
+        icon: "question"
+      });
+      return;
+
+    }
+
+    setIsLoading(true);
+    setError(null);
+    setSucces(false);
+
+    try {
+      const formData = new FormData();
+      formData.append("empCode", empCode)
+      const res = await axios.post(`http://localhost:8099/punch/${empCode}`);
+      setResposeArray(res.data);
+      setSucces(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    } catch (error) {
+      console.error("Error on the submision:", error);
+      setError(error);
+      setTimeout(() => {
+        window.location.reload();
+      }, 3000);
+    } finally {
+      setIsLoading(false);
+    }
   }
-  if (mutation.isError) {
-    return <span>Error: {mutation.error.message}</span>;
+
+  if (isLoading) {
+    return (
+      <>
+        <div className="content">
+          <header>
+            Registrando comida
+          </header>
+          <div className="loader"></div>
+        </div>
+      </>
+    )
   }
-  if (mutation.isSuccess) {
-    return <span>Punch submitted!</span>;
+  if (error) {
+    return (
+      <>
+        <div className="content">
+          <header>
+            {error.response.data}
+          </header>
+        </div>
+      </>
+    )
   }
+  if (succes) {
+    return (
+      <>
+        <div className="content">
+          <header>
+            {responseArray[0]?.EmpCode}
+            <br />
+            <br />
+            {responseArray[0]?.EmpName}
+          </header>
+        </div>
+      </>
+    )
+  }
+
+
 
   return (
     <>
       <div className="content">
         <header>Registro para comedor</header>
 
-        <form 
-        onSubmit={submitPunch}>
-
+        <form
+          onSubmit={submitPunch}>
           {/* Emp Code 1 */}
           <div className="field">
             <span className="fa fa-user"></span>
             <input
-              type="text"
+              type="number"
               required
+              // onInvalid={e => e.target.setCustomValidity("Code is required")}
               placeholder="Numero de empleado"
               value={empCode}
               onChange={(data) => SetEmpCode(data.target.value)}>
@@ -56,8 +119,10 @@ function App() {
           <div className="field">
             <span className="fa fa-user"></span>
             <input
-              type="text"
-              required placeholder="Confirmar numero de empleado"
+              type="number"
+              required
+              // onInvalid={e => e.target.setCustomValidity("Code is required")}
+              placeholder="Confirmar numero de empleado"
               onChange={(data) => SetEmpCode2(data.target.value)}>
             </input>
           </div>
