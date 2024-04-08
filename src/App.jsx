@@ -1,8 +1,8 @@
 import './assets/css/app.css';
 import { useState } from 'react';
-import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { prdAxios } from '../dataConf'
 
 function App() {
   const [empCode, SetEmpCode] = useState('');
@@ -38,7 +38,7 @@ function App() {
     try {
       const formData = new FormData();
       formData.append("empCode", empCode)
-      const res = await axios.post(`http://localhost:8099/punch/${empCode}`);
+      const res = await prdAxios.post(`punch/${empCode}`);
       setResposeArray(res.data);
       setSucces(true);
       setTimeout(() => {

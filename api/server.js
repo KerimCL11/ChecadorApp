@@ -6,12 +6,14 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Express App Configuration
-const PORT = process.env.port;
+const PORT = process.env.PORT;
 const IP = process.env.server;
 
 app.use(cors({ //cors
-    origin: '*'
+    // origin: '*'
+    origin:process.env.FOODPC // Prod
 }));
+
 app.use(express.json()); //json
 app.use(express.urlencoded( //sabe que es pero asi agarra chilo
     { extended: false }
