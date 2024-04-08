@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { prdAxios } from '../dataConf'
+import logoImg from "./assets/LOGO.png"
 
 function App() {
   const [empCode, SetEmpCode] = useState('');
@@ -97,6 +98,9 @@ function App() {
 
   return (
     <>
+      <div className="logo">
+        <img src={logoImg}/>
+      </div>
       <div className="content">
         <header>Registro para comedor</header>
 

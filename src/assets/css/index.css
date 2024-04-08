@@ -6,7 +6,8 @@
 }
 
 body {
-  background: url('../bg.jpg');
+  /*background: url('../bg.jpg');*/
+  background: url('../atem.JPG');
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -19,7 +20,7 @@ body:after {
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 input::-webkit-inner-spin-button,
